@@ -22,18 +22,7 @@ import java.nio.channels.UnresolvedAddressException;
 import java.util.Collections;
 import java.util.Random;
 
-import static cc.blynk.server.core.protocol.enums.Command.BRIDGE;
-import static cc.blynk.server.core.protocol.enums.Command.DELETE_WIDGET;
-import static cc.blynk.server.core.protocol.enums.Command.EMAIL;
-import static cc.blynk.server.core.protocol.enums.Command.EXPORT_GRAPH_DATA;
-import static cc.blynk.server.core.protocol.enums.Command.HARDWARE;
-import static cc.blynk.server.core.protocol.enums.Command.HARDWARE_RESEND_FROM_BLUETOOTH;
-import static cc.blynk.server.core.protocol.enums.Command.HARDWARE_SYNC;
-import static cc.blynk.server.core.protocol.enums.Command.LOAD_PROFILE_GZIPPED;
-import static cc.blynk.server.core.protocol.enums.Command.RESET_PASSWORD;
-import static cc.blynk.server.core.protocol.enums.Command.SET_WIDGET_PROPERTY;
-import static cc.blynk.server.core.protocol.enums.Command.SHARE_LOGIN;
-import static cc.blynk.server.core.protocol.enums.Command.SHARING;
+import static cc.blynk.server.core.protocol.enums.Command.*;
 import static cc.blynk.server.core.protocol.model.messages.MessageFactory.produce;
 
 /**
@@ -97,7 +86,10 @@ public abstract class BaseClient {
                 || command == SET_WIDGET_PROPERTY
                 || command == HARDWARE_SYNC
                 || command == RESET_PASSWORD
-                || command == DELETE_WIDGET) {
+                || command == DELETE_WIDGET
+                || command == REGISTER
+                || command == LOGIN
+                || command == MOBILE_GET_DEVICE) {
             body = body.replace(" ", "\0");
         }
         return produce(msgId, command, body);

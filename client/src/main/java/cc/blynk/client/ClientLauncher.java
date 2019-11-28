@@ -4,6 +4,7 @@ import cc.blynk.client.core.ActiveHardwareClient;
 import cc.blynk.client.core.AppClient;
 import cc.blynk.client.core.HardwareClient;
 import cc.blynk.client.enums.ClientMode;
+import cc.blynk.utils.properties.ServerProperties;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
@@ -11,6 +12,8 @@ import org.apache.commons.cli.ParseException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * The Blynk Project.
@@ -48,7 +51,7 @@ public final class ClientLauncher {
 
         switch (mode) {
             case APP :
-                new AppClient(host, port).start(new BufferedReader(new InputStreamReader(System.in)));
+                new AppClient(host, port, new Random(), new ServerProperties(new HashMap<>())).start(new BufferedReader(new InputStreamReader(System.in)));
                 break;
             case HARDWARE :
                 new HardwareClient(host, port).start(new BufferedReader(new InputStreamReader(System.in)));

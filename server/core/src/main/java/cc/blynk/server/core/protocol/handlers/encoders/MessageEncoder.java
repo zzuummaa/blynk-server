@@ -33,7 +33,7 @@ public class MessageEncoder extends MessageToByteEncoder<MessageBase> {
             stats.mark(message.command);
 
             byte[] body = message.getBytes();
-            out.writeShort(body.length);
+            out.writeInt(body.length);
             if (body.length > 0) {
                 out.writeBytes(body);
             }

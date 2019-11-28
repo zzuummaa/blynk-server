@@ -29,7 +29,7 @@ public class AppClient extends BaseClient {
         super(host, port, new Random());
     }
 
-    protected AppClient(String host, int port, Random msgIdGenerator, ServerProperties properties) {
+    public AppClient(String host, int port, Random msgIdGenerator, ServerProperties properties) {
         super(host, port, msgIdGenerator, properties);
         log.info("Creating app client. Host {}, sslPort : {}", host, port);
         File serverCert = makeCertificateFile("server.ssl.cert");

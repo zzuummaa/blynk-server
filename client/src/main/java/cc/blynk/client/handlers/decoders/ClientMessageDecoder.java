@@ -44,10 +44,10 @@ public class ClientMessageDecoder extends ByteToMessageDecoder {
 
         MessageBase message;
         if (command == Command.RESPONSE) {
-            int responseCode = in.readUnsignedShort();
+            int responseCode = (int)in.readUnsignedInt();
             message = new ResponseMessage(messageId, responseCode);
         } else {
-            int length = in.readUnsignedShort();
+            int length = (int)in.readUnsignedInt();
 
             if (in.readableBytes() < length) {
                 in.resetReaderIndex();

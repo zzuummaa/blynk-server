@@ -29,6 +29,7 @@
 
         <module>launcher</module>
         <module>tools</module>
+        <module>procedure-executor</module>
     </modules>
 
 </project>

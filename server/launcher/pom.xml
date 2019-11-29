@@ -79,7 +79,11 @@
             <artifactId>http-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>ru.zuma</groupId>
+            <artifactId>procedure-executor</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

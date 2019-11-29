@@ -51,7 +51,8 @@ public final class ClientLauncher {
 
         switch (mode) {
             case APP :
-                new AppClient(host, port, new Random(), new ServerProperties(new HashMap<>())).start(new BufferedReader(new InputStreamReader(System.in)));
+                new AppClient(host, port, new Random(), new ServerProperties(new HashMap<>()))
+                        .start(new BufferedReader(new InputStreamReader(System.in)));
                 break;
             case HARDWARE :
                 new HardwareClient(host, port).start(new BufferedReader(new InputStreamReader(System.in)));

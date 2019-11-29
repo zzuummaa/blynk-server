@@ -16,6 +16,7 @@ import cc.blynk.utils.properties.ServerProperties;
 import cc.blynk.utils.properties.SmsProperties;
 import cc.blynk.utils.properties.TwitterProperties;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import ru.zuma.ProcedureExecutorImpl;
 
 import java.io.File;
 import java.net.BindException;
@@ -92,9 +93,10 @@ public final class ServerLauncher {
                               SmsProperties smsProperties, GCMProperties gcmProperties,
                               TwitterProperties twitterProperties,
                               boolean restore) {
+        ProcedureExecutorImpl procedureExecutor = new ProcedureExecutorImpl(serverProperties.getProperty("data.folder"));
         Holder holder = new Holder(serverProperties,
                 mailProperties, smsProperties, gcmProperties, twitterProperties,
-                restore);
+                restore, procedureExecutor);
 
         BaseServer[] servers = new BaseServer[] {
                 new HardwareAndHttpAPIServer(holder),

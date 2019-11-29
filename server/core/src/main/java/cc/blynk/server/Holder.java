@@ -86,11 +86,21 @@ public class Holder {
 
     public final TokensPool tokensPool;
 
+    public final ProcedureExecutor procedureExecutor;
+
     public Holder(ServerProperties serverProperties, MailProperties mailProperties,
                   SmsProperties smsProperties, GCMProperties gcmProperties,
                   TwitterProperties twitterProperties,
                   boolean restore) {
+        this(serverProperties, mailProperties, smsProperties, gcmProperties, twitterProperties, restore, null);
+    }
+
+    public Holder(ServerProperties serverProperties, MailProperties mailProperties,
+                  SmsProperties smsProperties, GCMProperties gcmProperties,
+                  TwitterProperties twitterProperties,
+                  boolean restore, ProcedureExecutor procedureExecutor) {
         disableNettyLeakDetector();
+        this.procedureExecutor = procedureExecutor;
         this.props = serverProperties;
 
         this.fileManager = new FileManager(serverProperties.getDataFolder(), serverProperties.host);
@@ -164,6 +174,7 @@ public class Holder {
                   BlockingIOProcessor blockingIOProcessor,
                   String dbFileName) {
         disableNettyLeakDetector();
+        this.procedureExecutor = null;
         this.props = serverProperties;
 
         this.fileManager = new FileManager(serverProperties.getDataFolder(), serverProperties.host);

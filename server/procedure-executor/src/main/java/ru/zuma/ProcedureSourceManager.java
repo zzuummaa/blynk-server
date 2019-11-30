@@ -15,29 +15,37 @@ public class ProcedureSourceManager {
     private static final String SOURCES_DIR_NAME = "sources";
     private static final String CLASSES_DIR_NAME = "classes";
 
-    private List<Path> sources;
 
     private Path procedureDir;
     private Path sourcesDir;
     private Path classesDir;
 
     public ProcedureSourceManager(String dataFolder) {
-        this.sources = new ArrayList<>();
-
         try {
             this.procedureDir = createDirectories(Paths.get(dataFolder, PROCEDURE_DIR_NAME));
             this.sourcesDir = createDirectories(Paths.get(dataFolder, PROCEDURE_DIR_NAME, SOURCES_DIR_NAME));
             this.classesDir = createDirectories(Paths.get(dataFolder, PROCEDURE_DIR_NAME, CLASSES_DIR_NAME));
-
-            this.sources = Files.walk(this.sourcesDir).filter(Files::isRegularFile).collect(toList());
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
     }
 
+    private List<Path> getFilesFromDir(Path dir) {
+        try {
+            return Files.walk(dir).filter(Files::isRegularFile).collect(toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
     public List<Path> getSourcePaths() {
-        return sources;
+        return getFilesFromDir(sourcesDir);
+    }
+
+    public List<Path> getClassesPaths() {
+        return getFilesFromDir(classesDir);
     }
 
     public Path getSourcesDir() {

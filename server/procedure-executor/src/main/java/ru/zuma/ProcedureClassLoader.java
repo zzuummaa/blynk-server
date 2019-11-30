@@ -4,19 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.zuma.interfaces.Procedure;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
+import java.io.*;
 
 public class ProcedureClassLoader extends ClassLoader {
     protected static final Logger log = LogManager.getLogger(ProcedureClassLoader.class);
 
-    public Procedure instance(Path filePath) {
-        log.debug("Hello, zuma!");
-        log.error("Hello, zuma!");
+    public Procedure instance(String filePath) {
         try {
-            Class clazz = findClass(filePath.toString());
+            Class clazz = findClass(filePath);
             if (clazz.isAssignableFrom(Procedure.class)) {
                 return ((Class<Procedure>)clazz).getConstructor().newInstance();
             } else return null;
@@ -27,18 +22,16 @@ public class ProcedureClassLoader extends ClassLoader {
     }
 
     @Override
-    public Class findClass(String name) {
-        byte[] b = loadClassFromFile(name);
-        return defineClass(name, b, 0, b.length);
+    public Class findClass(String path) {
+        byte[] b = loadClassFromFile(path);
+        return defineClass(new File(path).getName(), b, 0, b.length);
     }
 
-    private byte[] loadClassFromFile(String fileName)  {
+    private byte[] loadClassFromFile(String path)  {
         byte[] buffer;
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         try {
-            InputStream inputStream = Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResourceAsStream(fileName + ".class");
+            InputStream inputStream = new FileInputStream(new File(path + ".class"));
             int nextValue = 0;
 
             while ((nextValue = inputStream.read()) != -1) {

@@ -24,8 +24,8 @@ public class ProcedureCompiler {
             this.compilerPath = compilerFileName;
             this.targetDir = targetDir;
             try {
-                this.classPath = ".;" + new File(ProcedureCompiler.class.getProtectionDomain().getCodeSource()
-                        .getLocation().toURI()).getPath();
+                this.classPath = ".;" + new File(ProcedureCompiler.class.getProtectionDomain()
+                        .getCodeSource().getLocation().toURI()).getPath();;
             } catch (URISyntaxException e) {
                 log.error("", e);
             }
@@ -37,13 +37,20 @@ public class ProcedureCompiler {
     public boolean compile(String filename) {
         if (compilerPath == null) return false;
         File file = new File(filename);
-        String[] params = new String[]{"-d", targetDir, "-cp", classPath, file.getName()};
+        String[] params = new String[]{compilerPath, "-d", targetDir, "-cp", classPath, file.getName()};
         try {
-            Process process = Runtime.getRuntime().exec(compilerPath, params, file.getParentFile());
+            ProcessBuilder builder = new ProcessBuilder(params);
+            builder.directory(file.getParentFile());
+            Process process = builder.start();
             StringWriter writer = new StringWriter();
             IOUtils.copy(new InputStreamReader(process.getInputStream()), writer);
             String compillerOuput = writer.toString();
-            return process.waitFor() == 0;
+            if (process.waitFor() == 0) {
+                return true;
+            } else {
+                log.error("Can't compile " + file.getName() + ":" + System.lineSeparator() + compillerOuput);
+                return false;
+            }
         } catch (IOException | InterruptedException e) {
             log.error("", e);
             return false;

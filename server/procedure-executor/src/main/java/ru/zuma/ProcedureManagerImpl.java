@@ -1,6 +1,6 @@
 package ru.zuma;
 
-import cc.blynk.server.ProcedureExecutor;
+import cc.blynk.server.ProcedureManager;
 import cc.blynk.server.core.model.auth.User;
 import cc.blynk.server.core.model.enums.PinType;
 import ru.zuma.interfaces.PinValueWriteHandler;
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
-public class ProcedureExecutorImpl implements ProcedureExecutor {
+public class ProcedureManagerImpl implements ProcedureManager {
     private final String classesDir;
     private ProcedureSourceManager sourceManager;
     private final ProcedureClassLoader classLoader;
@@ -21,15 +21,12 @@ public class ProcedureExecutorImpl implements ProcedureExecutor {
     private List<Path> sources;
     private List<Procedure> procedures;
 
-    public ProcedureExecutorImpl(String dataFolder) {
+    public ProcedureManagerImpl(String dataFolder, String compilerName) {
         this.sourceManager = new ProcedureSourceManager(dataFolder);
         this.classLoader = new ProcedureClassLoader();
         this.sources = this.sourceManager.getSourcePaths();
         this.classesDir = this.sourceManager.getClassesDir().toString();
-        this.compiler = new ProcedureCompiler(
-                "D:\\Programs\\JetBrains\\apps\\IDEA-U\\ch-0\\193.5233.102\\jbr\\bin\\javac.exe",
-                this.sourceManager.getClassesDir().toString());
-
+        this.compiler = new ProcedureCompiler(compilerName, this.sourceManager.getClassesDir().toString());
         procedures = this.sources.stream().map(path -> {
             if (this.compiler.compile(path.toString())) {
                 String fileName = path.getFileName().toString().split("\\.")[0];

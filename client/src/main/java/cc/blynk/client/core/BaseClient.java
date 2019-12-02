@@ -96,6 +96,10 @@ public abstract class BaseClient {
     }
 
     public void start(BufferedReader commandInputStream) {
+        start(commandInputStream, new String[0]);
+    }
+
+    public void start(BufferedReader commandInputStream, String[] before) {
         this.nioEventLoopGroup = new NioEventLoopGroup(1);
         try {
             Bootstrap b = new Bootstrap();
@@ -106,7 +110,7 @@ public abstract class BaseClient {
 
             // Start the connection attempt.
             this.channel = b.connect(host, port).sync().channel();
-            readUserInput(commandInputStream);
+            readUserInput(commandInputStream, before);
         } catch (UnresolvedAddressException uae) {
             log.error("Host name '{}' is invalid. Please make sure it is correct name.", host);
         } catch (ConnectTimeoutException cte) {
@@ -148,8 +152,17 @@ public abstract class BaseClient {
 
     protected abstract ChannelInitializer<SocketChannel> getChannelInitializer();
 
-    private void readUserInput(BufferedReader commandInputStream) throws IOException {
+    private void readUserInput(BufferedReader commandInputStream, String[] before) throws IOException {
         String line;
+        for (int i = 0; i < before.length; i++) {
+            line = before[i];
+            MessageBase msg = produceMessageBaseOnUserInput(line, (short) random.nextInt(Short.MAX_VALUE));
+            if (msg == null) {
+                continue;
+            }
+            System.out.println(line);
+            send(msg);
+        }
         while ((line = commandInputStream.readLine()) != null) {
             // If user typed the 'quit' command, wait until the server closes the connection.
             if ("quit".equals(line.toLowerCase())) {

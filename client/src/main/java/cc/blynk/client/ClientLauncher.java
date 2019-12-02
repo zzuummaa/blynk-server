@@ -52,7 +52,9 @@ public final class ClientLauncher {
         switch (mode) {
             case APP :
                 new AppClient(host, port, new Random(), new ServerProperties(new HashMap<>()))
-                        .start(new BufferedReader(new InputStreamReader(System.in)));
+                        .start(new BufferedReader(new InputStreamReader(System.in)),
+                                new String[]{"register username@example.com UserPassword Blynk",
+                                             "login username@example.com UserPassword Blynk"});
                 break;
             case HARDWARE :
                 new HardwareClient(host, port).start(new BufferedReader(new InputStreamReader(System.in)));
